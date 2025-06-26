@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style> 
+        h1 {
+            color: white; 
+            font-size:50px;
+            margin: 0; /* Remove margin to prevent unwanted spacing */
+        }
+        h2 {
+            color: black;
+            font-style:italic; 
+        }
+        body {  
+            background-color: orange;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Flexbox container for images */
+        .image-container {
+            display: flex;
+            justify-content: center; 
+            gap: 30px;  /* Space between images */
+        }
+
+        .image-container img {
+            width: 450px;
+            height: 250px;
+            border-radius: 25px;
+            border-style:dotted;
+             border-colour:white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Hover effect for images */
+        .image-container img:hover {
+            transform: scale(1.1); /* Increase the size of the image */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a shadow around the image */
+        }
+
+        /* Box for the h1 elements */
+        .h1-box {
+            background-color: rebeccapurple; /* Light blue background for the box */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px; /* Space below the box */
+        }
+
+        /* Optional: Styling for the "start here" link */
+        .start-link {
+            font-size: 20px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding an Image to the Page</title>
+</head>
+<body>
+    <!-- Box containing the h1 elements -->
+    <div class="h1-box">
+        <h1>Track goals</h1>
+        <h1>and show progress</h1>
+    </div>
+
+    <!-- Flexbox container for images -->
+    <div class="image-container">
+        <img src="images/goal1.png" alt="A description of the image">
+        <img src="images/image3.png" alt="A description of the image">
+        <img src="images/goal2.jpg" alt="A description of the image">
+    </div>
+
+    <center><h2>Track your goals and achieve success with our support</h2></center>
+    <!-- Start here link -->
+    <center><a href="login.php" class="start-link">Start here</a></center> 
+</body>
+</html>

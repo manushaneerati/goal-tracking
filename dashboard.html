@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Tracking Dashboard</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Container for the entire dashboard */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            height: 100%;
+            padding: 20px;
+        }
+
+        /* Left side of the dashboard */
+        .left-side {
+            flex: 1;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 2px solid #ddd;
+        }
+
+        /* Right side of the dashboard */
+        .right-side {
+            flex: 2;
+            background-color: #ffffff;
+            padding: 20px;
+            border-left: 2px solid #ddd;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            background-color: ;
+        }
+
+        /* Goal Section Styling */
+        .goal-section {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .goal-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .goal-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .goal-item {
+            padding: 10px;
+            background-color: #f0f0f0;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .goal-item button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .goal-item button:hover {
+            background-color: #ff0000;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .progress-bar div {
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .progress-bar.completed div {
+            background-color: #4caf50;
+        }
+
+        .progress-bar.in-progress div {
+            background-color: #2196f3;
+        }
+
+        /* Form for adding goals */
+        .goal-form input, .goal-form button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .goal-form button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .goal-form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .left-side, .right-side {
+                flex: 1 1 100%;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Goal Tracking Dashboard</h1>
+</header>
+
+<div class="dashboard-container">
+    <!-- Left Side - Goal List Section -->
+    <div class="left-side">
+        <div class="goal-section">
+            <h2>My Goals</h2>
+            <ul class="goal-list" id="goalList">
+                <!-- Goals will be listed here dynamically -->
+            </ul>
+        </div>
+
+        <!-- Form to add new goals -->
+        <div class="goal-section">
+            <h2>Add New Goal</h2>
+            <form class="goal-form" id="goalForm">
+                <input type="text" id="goalInput" placeholder="Enter new goal" required>
+                <button type="submit">Add Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Side - Progress Tracker Section -->
+    <div class="right-side">
+        <div class="goal-section">
+            <h2>Track Progress</h2>
+            <div id="progressInfo">
+                <!-- Goal progress bars will be shown here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// JavaScript to manage the goal list and progress tracker
+
+const goalList = document.getElementById("goalList");
+const goalForm = document.getElementById("goalForm");
+const goalInput = document.getElementById("goalInput");
+const progressInfo = document.getElementById("progressInfo");
+
+let goals = [];
+
+// Function to render the goal list
+function renderGoals() {
+    goalList.innerHTML = "";
+    goals.forEach((goal, index) => {
+        const li = document.createElement("li");
+        li.classList.add("goal-item");
+        
+        li.innerHTML = `
+            <span>${goal.text}</span>
+            <button onclick="removeGoal(${index})">Remove</button>
+        `;
+        
+        goalList.appendChild(li);
+    });
+}
+
+// Function to render the progress bar for each goal
+function renderProgress() {
+    progressInfo.innerHTML = "";
+    goals.forEach((goal, index) => {
+        const div = document.createElement("div");
+        div.classList.add("progress-bar");
+        div.innerHTML = `
+            <span>${goal.text} - Progress:</span>
+            <input type="number" value="${goal.progress}" min="0" max="100" onchange="updateProgress(${index}, event)">
+            <div style="width: ${goal.progress}%"></div>
+        `;
+        progressInfo.appendChild(div);
+    });
+}
+
+// Function to add a new goal
+goalForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const goalText = goalInput.value.trim();
+    if (goalText) {
+        goals.push({ text: goalText, progress: 0 });
+        goalInput.value = ""; // Clear input field
+
+        renderGoals();
+        renderProgress();
+    }
+});
+
+// Function to remove a goal
+function removeGoal(index) {
+    goals.splice(index, 1);
+    renderGoals();
+    renderProgress();
+}
+
+// Function to update the progress of a goal
+function updateProgress(index, event) {
+    const progressValue = event.target.value;
+    goals[index].progress = progressValue;
+    renderProgress();
+}
+
+// Initial rendering
+renderGoals();
+renderProgress();
+
+</script>
+
+</body>
+</html> 
